@@ -1,0 +1,73 @@
+/* Основной фон и шрифты */
+body {
+    background-color: #f4f7f6;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #333;
+}
+
+/* Контейнер сканера */
+#reader {
+    border: 2px solid #dee2e6 !important;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #000;
+    margin-bottom: 1.5rem;
+}
+
+/* Стилизация видеопотока внутри сканера */
+#reader video {
+    object-fit: cover;
+}
+
+/* Карточка ввода */
+.card {
+    border: none;
+    border-radius: 16px;
+    transition: transform 0.2s ease;
+}
+
+/* Поле ввода IMEI (делаем его крупным для удобства) */
+#imeiInput {
+    letter-spacing: 2px;
+    font-weight: 600;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    border: 2px solid #ced4da;
+}
+
+#imeiInput:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+/* Кнопка проверки */
+.btn-primary {
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Область результата (JSON или данные) */
+.result-card {
+    background: #fff;
+    border-left: 5px solid #0d6efd;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+/* Статусы валидации */
+.text-success { color: #198754 !important; font-weight: 500; }
+.text-danger { color: #dc3545 !important; font-weight: 500; }
+
+/* Анимация пульсации для сканера (чтобы оператор видел, что он активен) */
+@keyframes scan-line {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(200px); }
+}
+
+/* Кастомный лоадер, если нужно будет ждать API */
+.spinner-border-sm {
+    margin-right: 8px;
+}
