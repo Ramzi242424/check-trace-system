@@ -1,30 +1,48 @@
-export function validateLuhn(imei) {
-    let s = 0;
-    let double = false;
-    for (let i = imei.length - 1; i >= 0; i--) {
-        let digit = parseInt(imei[i]);
-        if (double) {
-            digit *= 2;
-            if (digit > 9) digit -= 9;
-        }
-        s += digit;
-        double = !double;
+import { validateLuhn } from './app.js'; // Если вынес отдельно
+import { startScanner, stopScanner } from './scanner.js';
+
+// Селекторы
+const startBtn = document.getElementById('startBtn');
+const stopBtn = document.getElementById('stopBtn');
+const imeiInput = document.getElementById('imeiInput');
+const checkBtn = document.getElementById('checkBtn');
+
+// Валидация Луна (дублирую здесь для ясности)
+function isImeiValid(imei) {
+    if (!/^\d{15}$/.test(imei)) return false;
+    let sum = 0;
+    for (let i = 0; i < 15; i++) {
+        let d = parseInt(imei[i]);
+        if (i % 2 !== 0) d *= 2;
+        if (d > 9) d -= 9;
+        sum += d;
     }
-    return (s % 10) === 0;
+    return sum % 10 === 0;
 }
 
-document.getElementById('checkBtn').addEventListener('click', () => {
-    const imei = document.getElementById('imeiInput').value.trim();
-    const feedback = document.getElementById('feedback');
+// Управление сканером
+startBtn.addEventListener('click', () => {
+    startScanner((code) => {
+        console.log("IMEI считан:", code);
+        // Можно сразу запускать проверку после сканирования
+    });
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
+});
 
-    if (imei.length !== 15 || !validateLuhn(imei)) {
-        feedback.textContent = "❌ Неверный формат или контрольная сумма";
-        feedback.className = "form-text text-danger";
-        return;
+stopBtn.addEventListener('click', () => {
+    stopScanner();
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+});
+
+// Проверка
+checkBtn.addEventListener('click', () => {
+    const imei = imeiInput.value.trim();
+    if (isImeiValid(imei)) {
+        alert("IMEI валиден! Отправляю в базу...");
+        // Тут будет вызов Firebase
+    } else {
+        alert("Ошибка: Неверный IMEI");
     }
-    
-    feedback.textContent = "✅ IMEI валиден. Запрашиваю данные...";
-    feedback.className = "form-text text-success";
-    
-    // Дальше логика вызова check_imei_api() и сохранения в Firebase
 });
